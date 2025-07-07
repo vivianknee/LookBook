@@ -14,7 +14,8 @@ struct ContentView: View {
                 Spacer()
             }
             
-            ScrollView {
+            VStack(spacing: 0) {
+                // Fixed Header Section
                 VStack(spacing: 20) {
                     // Profile Section
                     VStack(spacing: 12) {
@@ -64,23 +65,13 @@ struct ContentView: View {
                     
                     // Highlights Section
                     VStack(alignment: .leading, spacing: 12) {
-                        
                         ScrollView(.horizontal, showsIndicators: false) {
                             HStack(spacing: 20) {
                                 ForEach(0..<8) { index in
                                     VStack {
                                         Circle()
-                                            .fill(LinearGradient(
-                                                colors: [.pink, .purple, .blue],
-                                                startPoint: .topLeading,
-                                                endPoint: .bottomTrailing
-                                            ))
+                                            .fill(Color.gray)
                                             .frame(width: 70, height: 70)
-                                            .overlay(
-                                                Image(systemName: "star.fill")
-                                                    .foregroundColor(.white)
-                                                    .font(.title2)
-                                            )
                                         
                                         Text("Collection \(index + 1)")
                                             .font(.caption)
@@ -120,32 +111,64 @@ struct ContentView: View {
                             .frame(height: 1)
                     }
                     .padding(.horizontal)
-                    
-                    // Posts Grid
-                    LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 5), count: 3), spacing: 4) {
-                        ForEach(0..<15) { index in
-                            RoundedRectangle(cornerRadius: 8)
-                                .fill(LinearGradient(
-                                    colors: [.orange, .red, .pink, .purple, .blue, .green].shuffled(),
-                                    startPoint: .topLeading,
-                                    endPoint: .bottomTrailing
-                                ))
-                                .frame(height: 180) // Made posts longer vertically
-                                .overlay(
-                                    VStack {
-                                        Image(systemName: "heart.fill")
-                                            .foregroundColor(.white)
-                                            .font(.title2)
-                                        Text("Post \(index + 1)")
-                                            .font(.caption)
-                                            .foregroundColor(.white)
-                                            .fontWeight(.semibold)
-                                    }
-                                )
+                }
+                
+                // Scrollable Content Section
+                ScrollView {
+                    if selectedTab == "Recent Fits" {
+                        // Posts Grid
+                        LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 5), count: 3), spacing: 4) {
+                            ForEach(0..<15) { index in
+                                RoundedRectangle(cornerRadius: 8)
+                                    .fill(Color.gray)
+                                    .frame(height: 180) // Made posts longer vertically
+                                    .overlay(
+                                        VStack {
+                                            Image(systemName: "heart.fill")
+                                                .foregroundColor(.white)
+                                                .font(.title2)
+                                            Text("Post \(index + 1)")
+                                                .font(.caption)
+                                                .foregroundColor(.white)
+                                                .fontWeight(.semibold)
+                                        }
+                                    )
+                            }
                         }
+                        .padding(.horizontal, 4)
+                        .padding(.top, 20)
+                        .padding(.bottom, 18)
+                    } else {
+                        // Collections View
+                        VStack(spacing: 12) {
+                            ForEach(0..<10) { index in
+                                RoundedRectangle(cornerRadius: 12)
+                                    .fill(Color.gray)
+                                    .frame(height: 120)
+                                    .overlay(
+                                        HStack {
+                                            VStack(alignment: .leading, spacing: 8) {
+                                                Text("Collection \(index + 1)")
+                                                    .font(.title3)
+                                                    .fontWeight(.bold)
+                                                    .foregroundColor(.white)
+                                                
+                                                Text("\(Int.random(in: 5...50)) items")
+                                                    .font(.caption)
+                                                    .foregroundColor(.white.opacity(0.8))
+                                            }
+                                            .padding(.leading, 16)
+                                            
+                                            Spacer()
+                                        }
+                                    )
+                                    .shadow(radius: 3)
+                            }
+                        }
+                        .padding(.horizontal, 16)
+                        .padding(.top, 20)
+                        .padding(.bottom, 18)
                     }
-                    .padding(.horizontal, 4)
-                    .padding(.bottom, 18)
                 }
             }
             .background(
